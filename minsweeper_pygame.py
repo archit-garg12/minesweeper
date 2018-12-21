@@ -13,6 +13,7 @@ class Board():
         self.settings = settings
         self.screen = screen
         self.minesweeper = Minesweeper(self.settings.board_width, self.settings.board_height, self.settings.bombs)
+        self.turns = 0
     def update(self):
         for r in range(self.settings.board_width):
             for c in range(self.settings.board_height):
@@ -41,6 +42,7 @@ class Board():
         elif self.minesweeper.checkStatus() == 'You Win \n':
             pygame.time.wait(1000)
             self.minesweeper = Minesweeper(self.settings.board_width, self.settings.board_height, self.settings.bombs)
+            self.turns = 0 
             return True
         else:
             return True

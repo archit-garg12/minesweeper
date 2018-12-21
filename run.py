@@ -13,37 +13,34 @@ def run_game():
     settings = Settings()
     screen = pygame.display.set_mode([settings.screen_width, settings.screen_height])
     mine = Board(settings, screen)
-    turn_num = 0
     while mine.game_over():
-        turn_num = check_events(mine, turn_num)
+        check_events(mine)
         mine.update()
         pygame.display.flip()
     pygame.quit()
-def check_events(board, turn):
+def check_events(board):
     '''
     Checks for key events and quits if the x is pressed
     '''
     for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_click(event, board, turn)
-                turn += 1
-                return turn
+                mouse_click(event, board)
+                board.turns += 1
             if event.type == pygame.QUIT:
                 pygame.quit()
-    return turn
-def mouse_click(event, board, turn):
+def mouse_click(event, board):
     mousepos = pygame.mouse.get_pos()
     col = mousepos[0] // (board.settings.square + board.settings.margin) +1
     row = mousepos[1] // (board.settings.square + board.settings.margin) +1
     if event.button == 1 and board.minesweeper.checkValid(col,row):
         print('colmouse',mousepos[1],'rowmouse', mousepos[0])
         print('col',col,'row', row)
-        if turn == 0:
+        if board.turns == 0:
             board.minesweeper.selectFirst(col, row)
         else:
             board.minesweeper.select(col, row)
         board.minesweeper.checkStatus()
-    if event.button == 3 and turn != 0 and board.minesweeper.checkValid(col,row):
+    if event.button == 3 and board.turns != 0 and board.minesweeper.checkValid(col,row):
         board.minesweeper.flag(col, row)
     elif event.button == 3:
         board.minesweeper.unflag(col, row)
